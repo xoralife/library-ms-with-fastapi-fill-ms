@@ -9,6 +9,11 @@ from app.modules.categories.router import router as categories_router
 from app.modules.books.router import router as books_router
 from app.modules.librarians.router import router as librarians_router
 from app.modules.students.router import router as students_router
+from app.modules.borrowing.router import router as borrowing_router
+from app.modules.reservations.router import router as reservations_router
+from app.modules.fines.router import router as fines_router
+from app.modules.notifications.router import router as notifications_router
+from app.modules.activity_logs.router import router as activity_logs_router
 
 settings = get_settings()
 
@@ -41,6 +46,11 @@ app.include_router(categories_router, prefix="/api/v1")
 app.include_router(books_router, prefix="/api/v1")
 app.include_router(librarians_router, prefix="/api/v1")
 app.include_router(students_router, prefix="/api/v1")
+app.include_router(borrowing_router, prefix="/api/v1")
+app.include_router(reservations_router, prefix="/api/v1")
+app.include_router(fines_router, prefix="/api/v1")
+app.include_router(notifications_router, prefix="/api/v1")
+app.include_router(activity_logs_router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["Health"])

@@ -20,7 +20,6 @@ async def create_author(
     _: User = Depends(require_librarian),
     crud: AuthorCRUD = Depends(get_crud),
 ):
-    existing = await crud.get_all(search=data.name)
     return await crud.create(data.model_dump())
 
 

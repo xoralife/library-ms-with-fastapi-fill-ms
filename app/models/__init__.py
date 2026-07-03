@@ -3,6 +3,8 @@ from app.models.author import Author
 from app.models.publisher import Publisher
 from app.models.category import Category
 from app.models.book import Book, BookStatus
+from app.models.librarian import Librarian
+from app.models.student import Student
 from app.models.base import UUIDMixin, TimestampMixin
 
 __all__ = [
@@ -11,5 +13,7 @@ __all__ = [
     "Publisher",
     "Category",
     "Book", "BookStatus",
+    "Librarian",
+    "Student",
     "UUIDMixin", "TimestampMixin",
 ]

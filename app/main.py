@@ -7,6 +7,8 @@ from app.modules.authors.router import router as authors_router
 from app.modules.publishers.router import router as publishers_router
 from app.modules.categories.router import router as categories_router
 from app.modules.books.router import router as books_router
+from app.modules.librarians.router import router as librarians_router
+from app.modules.students.router import router as students_router
 
 settings = get_settings()
 
@@ -37,6 +39,8 @@ app.include_router(authors_router, prefix="/api/v1")
 app.include_router(publishers_router, prefix="/api/v1")
 app.include_router(categories_router, prefix="/api/v1")
 app.include_router(books_router, prefix="/api/v1")
+app.include_router(librarians_router, prefix="/api/v1")
+app.include_router(students_router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["Health"])

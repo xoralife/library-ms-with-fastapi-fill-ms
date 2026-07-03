@@ -10,6 +10,7 @@ from app.models.reservation import Reservation, ReservationStatus
 from app.models.fine import Fine, FineReason, Payment
 from app.models.notification import Notification, NotificationType
 from app.models.activity_log import ActivityLog
+from app.models.setting import Setting
 from app.models.base import UUIDMixin, TimestampMixin
 
 __all__ = [
@@ -25,5 +26,6 @@ __all__ = [
     "Fine", "FineReason", "Payment",
     "Notification", "NotificationType",
     "ActivityLog",
+    "Setting",
     "UUIDMixin", "TimestampMixin",
 ]

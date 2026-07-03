@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.core.security import decode_token
-from app.models.user import User, UserRole
+from app.models import User, UserRole
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

@@ -4,6 +4,16 @@ from pydantic import BaseModel
 from app.models.borrow import BorrowStatus
 
 
+class BookBriefResponse(BaseModel):
+    id: str
+    title: str
+    isbn: str
+    cover_image: Optional[str] = None
+    shelf_location: Optional[str] = None
+
+    model_config = {"from_attributes": True}
+
+
 class IssueBookRequest(BaseModel):
     book_id: str
     student_id: str
@@ -21,7 +31,7 @@ class RenewBookRequest(BaseModel):
 
 class LostDamagedRequest(BaseModel):
     borrow_record_id: str
-    status: BorrowStatus  # lost or damaged
+    status: BorrowStatus
     notes: Optional[str] = None
 
 
@@ -36,6 +46,7 @@ class BorrowRecordResponse(BaseModel):
     renewal_count: int
     status: BorrowStatus
     notes: Optional[str] = None
+    book: Optional[BookBriefResponse] = None
 
     model_config = {"from_attributes": True}
 

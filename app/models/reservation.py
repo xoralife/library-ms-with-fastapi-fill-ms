@@ -1,6 +1,5 @@
 import enum
 from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.mysql import CHAR
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.models.base import UUIDMixin, TimestampMixin
@@ -17,8 +16,8 @@ class ReservationStatus(str, enum.Enum):
 class Reservation(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "reservations"
 
-    book_id = Column(CHAR(36), ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
-    student_id = Column(CHAR(36), ForeignKey("students.id", ondelete="CASCADE"), nullable=False, index=True)
+    book_id = Column(String(36), ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    student_id = Column(String(36), ForeignKey("students.id", ondelete="CASCADE"), nullable=False, index=True)
     reservation_date = Column(DateTime, nullable=False)
     expiry_date = Column(DateTime, nullable=False)
     status = Column(Enum(ReservationStatus), default=ReservationStatus.PENDING, nullable=False)

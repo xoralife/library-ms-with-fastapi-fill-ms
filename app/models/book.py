@@ -1,6 +1,5 @@
 import enum
 from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.mysql import CHAR, YEAR
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.models.base import UUIDMixin, TimestampMixin
@@ -19,12 +18,12 @@ class Book(UUIDMixin, TimestampMixin, Base):
     isbn = Column(String(20), unique=True, nullable=False)
     barcode = Column(String(100), unique=True, nullable=True)
     qr_code = Column(String(500), nullable=True)
-    author_id = Column(CHAR(36), ForeignKey("authors.id", ondelete="SET NULL"), nullable=True)
-    publisher_id = Column(CHAR(36), ForeignKey("publishers.id", ondelete="SET NULL"), nullable=True)
-    category_id = Column(CHAR(36), ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
+    author_id = Column(String(36), ForeignKey("authors.id", ondelete="SET NULL"), nullable=True)
+    publisher_id = Column(String(36), ForeignKey("publishers.id", ondelete="SET NULL"), nullable=True)
+    category_id = Column(String(36), ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
     language = Column(String(50), default="English")
     edition = Column(String(50), nullable=True)
-    publish_year = Column(YEAR(4), nullable=True)
+    publish_year = Column(Integer, nullable=True)
     page_count = Column(Integer, nullable=True)
     shelf_location = Column(String(100), nullable=True)
     total_copies = Column(Integer, nullable=False, default=1)

@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
 from functools import lru_cache
+import os
 
 
 class Settings(BaseSettings):
@@ -8,6 +9,7 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = True
 
+    db_type: str = "sqlite"
     db_host: str = "localhost"
     db_port: int = 3306
     db_user: str = "root"
@@ -29,6 +31,9 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
+        if self.db_type == "sqlite":
+            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), f"{self.db_name}.db")
+            return f"sqlite+aiosqlite:///{db_path}"
         return (
             f"mysql+aiomysql://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}"
@@ -36,6 +41,9 @@ class Settings(BaseSettings):
 
     @property
     def database_url_sync(self) -> str:
+        if self.db_type == "sqlite":
+            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), f"{self.db_name}.db")
+            return f"sqlite:///{db_path}"
         return (
             f"mysql+pymysql://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}"

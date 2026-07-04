@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.config import get_settings
@@ -24,11 +25,14 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from app.database import async_session_factory
+    from app.database import async_session_factory, engine, Base
     from app.modules.settings.crud import SettingCRUD
     from app.core.auth import create_user
     from app.models.user import User, UserRole
     from sqlalchemy import select
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
     async with async_session_factory() as db:
         setting_crud = SettingCRUD(db)
@@ -81,6 +85,15 @@ app.include_router(reports_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    import traceback
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "traceback": traceback.format_exc()},
+    )
 
 
 @app.get("/health", tags=["Health"])

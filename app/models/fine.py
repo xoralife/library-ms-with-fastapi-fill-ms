@@ -25,12 +25,18 @@ class Fine(UUIDMixin, TimestampMixin, Base):
     student = relationship("Student", lazy="selectin")
 
 
+class PaymentMethod(str, enum.Enum):
+    CASH = "cash"
+    CARD = "card"
+    ONLINE = "online"
+
+
 class Payment(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "payments"
 
     fine_id = Column(String(36), ForeignKey("fines.id", ondelete="CASCADE"), nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
-    payment_method = Column(Enum("cash", "card", "online", name="payment_method"), nullable=False)
+    payment_method = Column(Enum(PaymentMethod), nullable=False)
     transaction_id = Column(String(255), nullable=True)
     payment_date = Column(DateTime, nullable=False)
     received_by = Column(String(36), ForeignKey("librarians.id", ondelete="SET NULL"), nullable=True)

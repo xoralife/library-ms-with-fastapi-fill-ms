@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
-from app.schemas.student import StudentCreate, StudentUpdate, StudentResponse
+from app.schemas.student import StudentCreate, StudentUpdate, StudentSelfUpdate, StudentResponse
 from app.schemas.common import PaginatedResponse, MessageResponse
 from app.modules.students.crud import StudentCRUD
 from app.core.permissions import require_admin, require_librarian, get_current_user
@@ -53,6 +53,19 @@ async def get_my_profile(
     return StudentResponse.model_validate(student)
 
 
+@router.put("/my", response_model=StudentResponse)
+async def update_my_profile(
+    data: StudentSelfUpdate,
+    current_user: User = Depends(get_current_user),
+    crud: StudentCRUD = Depends(get_crud),
+):
+    student = await crud.get_by_user_id(current_user.id)
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student profile not found")
+    updated = await crud.update(student, data.model_dump(exclude_unset=True))
+    return StudentResponse.model_validate(updated)
+
+
 @router.get("/{student_id}", response_model=StudentResponse)
 async def get_student(
     student_id: str,
@@ -77,6 +90,18 @@ async def update_student(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     updated = await crud.update(student, data.model_dump(exclude_unset=True))
     return StudentResponse.model_validate(updated)
+
+
+@router.delete("/{student_id}", response_model=MessageResponse)
+async def delete_student(
+    student_id: str,
+    _: User = Depends(require_admin),
+    crud: StudentCRUD = Depends(get_crud),
+):
+    deleted = await crud.delete(student_id)
+    if not deleted:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    return MessageResponse(message="Student deleted successfully")
 
 
 @router.put("/{student_id}/block", response_model=StudentResponse)

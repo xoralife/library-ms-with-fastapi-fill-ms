@@ -27,6 +27,11 @@ class StudentUpdate(BaseModel):
     address: Optional[str] = None
 
 
+class StudentSelfUpdate(BaseModel):
+    phone: Optional[str] = None
+    address: Optional[str] = None
+
+
 class StudentResponse(StudentBase):
     id: str
     user_id: str
